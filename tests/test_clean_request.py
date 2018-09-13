@@ -1,7 +1,6 @@
 """Test case for request.clean function
 """
 import unittest
-from time import gmtime
 
 from opening_hours.request.clean import clean, CleanRequestError
 
@@ -56,12 +55,12 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'day_of_week': 'friday',
                 'opening_hours': [
                     {
-                        'open': gmtime(32400),
-                        'close': gmtime(39600),
+                        'open': 32400,
+                        'close': 39600,
                     },
                     {
-                        'open': gmtime(57600),
-                        'close': gmtime(82800),
+                        'open': 57600,
+                        'close': 82800,
                     }
                 ],
                 'is_open': True
@@ -93,11 +92,16 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'day_of_week': 'friday',
                 'opening_hours': [
                     {
-                        'open': gmtime(82800),
-                        'close': gmtime(32400),
+                        'open': 82800,
+                        'close': 32400,
                     }
                 ],
                 'is_open': True
+            },
+            {
+                'day_of_week': 'saturday',
+                'opening_hours': [],
+                'is_open': False
             }
         ]
         self.assertEqual(clean(opening_hours), expected_result)
@@ -133,8 +137,8 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'day_of_week': 'friday',
                 'opening_hours': [
                     {
-                        'open': gmtime(57600),
-                        'close': gmtime(82800),
+                        'open': 57600,
+                        'close': 82800,
                     }
                 ],
                 'is_open': True
@@ -143,8 +147,8 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'day_of_week': 'saturday',
                 'opening_hours': [
                     {
-                        'open': gmtime(57600),
-                        'close': gmtime(82800),
+                        'open': 57600,
+                        'close': 82800,
                     }
                 ],
                 'is_open': True
