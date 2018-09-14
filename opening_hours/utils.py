@@ -6,6 +6,7 @@ from opening_hours.constants import (
     DAYS_OF_WEEK,
     DAYS_OF_WEEK_WITH_ORDER)
 
+
 def split_to_pairs(seq):
     """Split list into sublists with length == 2
 
