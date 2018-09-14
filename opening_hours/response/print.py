@@ -1,7 +1,5 @@
 """Print opening hours in human readable format
 """
-import time
-
 from opening_hours.utils import print_time
 
 
