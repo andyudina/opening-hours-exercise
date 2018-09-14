@@ -4,18 +4,12 @@ import unittest
 
 from opening_hours.request.clean import clean, CleanRequestError
 from opening_hours.constants import DAYS_OF_WEEK
+from tests.utils import generate_empty_request
+
 
 class TestCleanOpeningHours(unittest.TestCase):
     """Test processing opening hours request
     """
-
-    def generate_empty_request(self):
-        """
-        Help to generate request where all days don't have
-        opening or closing hours
-        """
-        return { day_of_week: [] for day_of_week in DAYS_OF_WEEK }
-
 
     def generate_empty_response(self):
         """
@@ -46,7 +40,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         """
         Days when restaurant is closed are processed successfully
         """
-        hours = self.generate_empty_request()
+        hours = generate_empty_request()
         expected_result = self.generate_empty_response()
         self.assertEqual(clean(hours), expected_result)
 
@@ -56,7 +50,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         are processed successfully
         """
         hours = {
-            **self.generate_empty_request(),
+            **generate_empty_request(),
             'friday': [
                 {
                     'type': 'open',
@@ -103,7 +97,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         successfully
         """
         hours = {
-            **self.generate_empty_request(),
+            **generate_empty_request(),
             'friday': [
                 {
                     'type': 'open',
@@ -145,7 +139,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         and closed on moday is processed successfully
         """
         hours = {
-            **self.generate_empty_request(),
+            **generate_empty_request(),
             'sunday': [
                 {
                     'type': 'open',
@@ -186,7 +180,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         Days of week are stored in the right order: from monday to sunday
         """
         hours = {
-            **self.generate_empty_request(),
+            **generate_empty_request(),
             'friday': [
                 {
                     'type': 'open',
@@ -240,7 +234,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         Error is thrown if no closing hours found
         """
         hours = {
-            **self.generate_empty_request(),
+            **generate_empty_request(),
             'friday': [
                 {
                     'type': 'open',
@@ -256,7 +250,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         Error is thrown if no opening hours found
         """
         hours = {
-            **self.generate_empty_request(),
+            **generate_empty_request(),
             'friday': [
                 {
                     'type': 'close',
@@ -272,7 +266,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         Error is thrown if multiple opening hours found one after another
         """
         hours = {
-            **self.generate_empty_request(),
+            **generate_empty_request(),
             'friday': [
                 {
                     'type': 'close',
