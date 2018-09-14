@@ -38,6 +38,8 @@ def _format_hours(days):
                     }
                 ],
                 'is_open': boolean
+            }
+        ]
     """
     def _format_one_day(day_name, day):
         """Transform one day to easy printable format
@@ -72,7 +74,7 @@ def clean(days):
         [
             {
                 'day_of_week': str,
-                'opening_hours': [
+                'hours': [
                     {
                         'open': int,
                         'close': int
