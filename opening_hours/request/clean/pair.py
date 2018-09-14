@@ -1,47 +1,18 @@
-"""Clean opening hours 
+"""Pair opening and closing
 """
 import json
 
 from opening_hours.constants import DAYS_OF_WEEK
-from opening_hours.utils import (
-    get_next_weekday_name,
-    get_previous_weekday_name,
-    split_to_pairs)
+from opening_hours.request.clean.errors import CleanRequestError
+from opening_hours.request.clean.utils import (
+    is_closing_hour,
+    is_opening_hour,
+    get_or_throw_exception,
+    get_next_day,
+    get_previous_day,
+)
+from opening_hours.utils import split_to_pairs
 
-
-class CleanRequestError(Exception):
-    """Error to be raised if cleaning request failed
-    because of invalid format
-    """
-    pass
-
-def _is_closing_hour(hour):
-    """Validate if hour is closing
-
-    Args:
-        hour (dict): Opening or closing hour with type an value. Format:
-            {
-                'type': str, 'value': int
-            }
-
-    Returns:
-        Boolean flag, that shows if hour is closing
-    """
-    return hour['type'] == 'close'
-
-def _is_opening_hour(hour):
-    """Validate if hour is open
-
-    Args:
-        hour (dict): Opening or closing hour with type an value. Format:
-            {
-                'type': str, 'value': int
-            }
-
-    Returns:
-        Boolean flag, that shows if hour is closing
-    """
-    return hour['type'] == 'open'
 
 def _validate_and_convert_hours_pair_to_dict(hours_pair):
     """Validate that hours pairs has correct format and convert to dict
@@ -72,8 +43,8 @@ def _validate_and_convert_hours_pair_to_dict(hours_pair):
             'Found unmatched hours. %s' % json.dumps(hours_pair))
     # Process pair with valid size
     opening_hour, closing_hour = hours_pair
-    if not _is_opening_hour(opening_hour) or \
-            not _is_closing_hour(closing_hour) or \
+    if not is_opening_hour(opening_hour) or \
+            not is_closing_hour(closing_hour) or \
             opening_hour['value'] > closing_hour['value']:
         raise CleanRequestError(
             'Invalid opening and closing hours found. '
@@ -118,14 +89,14 @@ def _pair_opening_and_closing_hours(hours):
     """
     # Check if first hour is unmatched closing hour
     unmatched_closing_hour = None
-    if len(hours) and _is_closing_hour(hours[0]):
+    if len(hours) and is_closing_hour(hours[0]):
         # First hour type is closing. Apparently previous day was not closed
         unmatched_closing_hour = hours[0]['value']
         # Remove closing hours of previous day from list
         hours = hours[1:]
     # Check if last hour is unmatched opening hour
     unmatched_opening_hour = None
-    if len(hours) and _is_opening_hour(hours[-1]):
+    if len(hours) and is_opening_hour(hours[-1]):
         # Last hour type is closing. Apparently current day is not closed
         unmatched_opening_hour = hours[-1]['value']
         # Remove closing hours of previous day from list
@@ -141,7 +112,7 @@ def _pair_opening_and_closing_hours(hours):
         'unmatched_closing_hour': unmatched_closing_hour
     }
 
-def _pair_hours_for_each_day(days):
+def pair_hours_for_each_day(days):
     """Group hours for each day in pairs of opening and closing hours
 
     First closing hour and last opening hour can be without pair,
@@ -177,49 +148,6 @@ def _pair_hours_for_each_day(days):
         lambda day: (day[0], _pair_opening_and_closing_hours(day[1])),
         days.items())
     return dict(days_processed)
-
-def _get_or_throw_exception(day_name, days):
-    """Get day by name from days and throw exception if day was not found
-
-    Args:
-        day_name (str): Name of the day
-        days (dict): Dict with days of week
-
-    Return:
-        day with day_name if found
-    """
-    try:
-        return days[day_name]
-    except KeyError:
-        raise CleanRequestError('Missing day: %s' % day_name)
-
-def _get_next_day(day_name, days):
-    """Retrieve next weekday from days dict
-    
-    Args:
-        day_name (str): Name of current weekday
-        days (dict): Dict with all weekdays
-
-    Return:
-        next_day_name (str): Name of the next weekday
-        next_day (dict): Next weekday retrieved from days dict
-    """
-    next_day_name = get_next_weekday_name(day_name)
-    return next_day_name, _get_or_throw_exception(next_day_name, days)
-
-def _get_previous_day(day_name, days):
-    """Retrieve previous weekday from days dict
-    
-    Args:
-        day_name (str): Name of current weekday
-        days (dict): Dict with all weekdays
-
-    Return:
-        previous_day_name (str): Name of the previous weekday
-        previous_day (dict): Previous weekday retrieved from days dict
-    """
-    previous_day_name = get_previous_weekday_name(day_name)
-    return previous_day_name, _get_or_throw_exception(previous_day_name, days)
 
 def _try_match_opening_and_closing_hour(opening_day, closing_day):
     """Attempt matching closing hours of the second day (closing day)
@@ -293,7 +221,7 @@ def _try_match_opening_and_closing_hour(opening_day, closing_day):
             'unmatched_closing_hour': None
         }
 
-def _pair_incomplete_hours_for_subsequent_days(days):
+def pair_incomplete_hours_for_subsequent_days(days):
     """Pair unmatched opening and closing hours if found
 
     Pair unmatched opening hour with unmatched closing hour of the next day
@@ -333,98 +261,17 @@ def _pair_incomplete_hours_for_subsequent_days(days):
         }
     """
     for day_name in DAYS_OF_WEEK:
-        day = _get_or_throw_exception(day_name, days)
+        day = get_or_throw_exception(day_name, days)
         # Try match opening hours with closing hours of the next day
         if day['unmatched_opening_hour']:
-            next_day_name, next_day = _get_next_day(day_name, days)
+            next_day_name, next_day = get_next_day(day_name, days)
             day, next_day = _try_match_opening_and_closing_hour(day, next_day)
             days = {**days, next_day_name: next_day}
         # Try match closing hours with opening hours of the next day
         if day['unmatched_closing_hour']:
-            previous_day_name, previous_day = _get_previous_day(day_name, days)
+            previous_day_name, previous_day = get_previous_day(day_name, days)
             previous_day, day = \
                 _try_match_opening_and_closing_hour(previous_day, day)
             days = {**days, previous_day_name: previous_day}
         days = {**days, day_name: day}
     return days
-
-def _format_hours(days):
-    """Transform opening hours of each day to easy printable format
-
-    Args:
-        days (dict): Dict with opening and closing hours for each day.
-        Format:
-        {
-            'day_of_week': {
-                'hours': [
-                    {
-                        'open': int,
-                        'close': int
-                    }
-                ]
-            }
-        }
-
-    Returns:
-        List of opening hours by days. Format:
-        [
-            {
-                'day_of_week': str,
-                'hours': [
-                    {
-                        'open': int,
-                        'close': int
-                    }
-                ],
-                'is_open': boolean
-    """
-    def _format_one_day(day_name, day):
-        """Transform one day to easy printable format
-        """
-        return {
-            'day_of_week': day_name,
-            'hours': day['hours'],
-            'is_open': len(day['hours']) > 0
-        }
-
-    days_formated = map(
-        lambda day_name: _format_one_day(day_name, days[day_name]),
-        DAYS_OF_WEEK)
-    return list(days_formated)
-
-def clean(days):
-    """Transform JSON request with opening hours to simplify further processing
-
-    Args:
-       days (dict): Valid dictionary with opening hours:
-       Format:
-       { 
-            'day_of_week': [
-                {
-                    'type': str, 'value': int
-                }
-            ] 
-        }
-
-    Returns:
-        List of opening hours by days. Format:
-        [
-            {
-                'day_of_week': str,
-                'opening_hours': [
-                    {
-                        'open': int,
-                        'close': int
-                    }
-                ],
-                'is_open': boolean
-            }
-        ]
-    """
-    # Group opening and closing hours into pairs
-    days_with_hours_in_pairs = _pair_hours_for_each_day(days)
-    # Complete shifts that start at one day and end during the next day
-    days_completed = \
-        _pair_incomplete_hours_for_subsequent_days(days_with_hours_in_pairs)
-    # Change day format adding is_open flag and day of week name
-    return _format_hours(days_completed)
