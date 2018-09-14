@@ -3,34 +3,60 @@
 import unittest
 
 from opening_hours.request.clean import clean, CleanRequestError
-
+from opening_hours.constants import DAYS_OF_WEEK
 
 class TestCleanOpeningHours(unittest.TestCase):
     """Test processing opening hours request
     """
 
-    def test_empty_opening_hours_processed_successfully(self):
+    def generate_empty_request(self):
+        """
+        Help to generate request where all days don't have
+        opening or closing hours
+        """
+        return { day_of_week: [] for day_of_week in DAYS_OF_WEEK }
+
+
+    def generate_empty_response(self):
+        """
+        Help to generate cleaned request where all days don't have
+        opening or closing hours
+        """
+        return [
+            {
+                'day_of_week': day_of_week,
+                'hours': [],
+                'is_open': False
+            }
+            for day_of_week in DAYS_OF_WEEK
+        ]
+
+    def update_response_list(self, response, updates):
+        """
+        Help to update response items with information from updates list
+        Merges using day_of_name as a key
+        """
+        updates_dict = { update['day_of_week']: update for update in updates }
+        return [
+            updates_dict.get(day['day_of_week'], day)
+            for day in response
+        ]
+
+    def test_empty_hours_processed_successfully(self):
         """
         Days when restaurant is closed are processed successfully
         """
-        opening_hours = {
-            'friday': []
-        }
-        expected_result = [
-            {
-                'day_of_week': 'friday',
-                'opening_hours': [],
-                'is_open': False
-            }
-        ]
-        self.assertEqual(clean(opening_hours), expected_result)
+        hours = self.generate_empty_request()
+        expected_result = self.generate_empty_response()
+        self.assertEqual(clean(hours), expected_result)
 
     def test_multiple_hours_during_same_day_processed_successfully(self):
         """
         Days when restaurant is open in multiple timeframes
         are processed successfully
         """
-        opening_hours = {
+        hours = {
+            **self.generate_empty_request(),
             'friday': [
                 {
                     'type': 'open',
@@ -53,7 +79,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         expected_result = [
             {
                 'day_of_week': 'friday',
-                'opening_hours': [
+                'hours': [
                     {
                         'open': 32400,
                         'close': 39600,
@@ -66,14 +92,18 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'is_open': True
             }
         ]
-        self.assertEqual(clean(opening_hours), expected_result)
+        expected_result = self.update_response_list(
+            self.generate_empty_response(),
+            expected_result)
+        self.assertEqual(clean(hours), expected_result)
 
     def test_closing_on_the_next_day_processed_successfully(self):
         """
         Days when restaurant closes on the next day are processed
         successfully
         """
-        opening_hours = {
+        hours = {
+            **self.generate_empty_request(),
             'friday': [
                 {
                     'type': 'open',
@@ -90,7 +120,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         expected_result = [
             {
                 'day_of_week': 'friday',
-                'opening_hours': [
+                'hours': [
                     {
                         'open': 82800,
                         'close': 32400,
@@ -100,17 +130,63 @@ class TestCleanOpeningHours(unittest.TestCase):
             },
             {
                 'day_of_week': 'saturday',
-                'opening_hours': [],
+                'hours': [],
                 'is_open': False
             }
         ]
-        self.assertEqual(clean(opening_hours), expected_result)
+        expected_result = self.update_response_list(
+            self.generate_empty_response(),
+            expected_result)
+        self.assertEqual(clean(hours), expected_result)
+
+    def test_sunday_with_closing_on_monday_processed_successfully(self):
+        """
+        Restaurant shift with shift that is opened on sunday
+        and closed on moday is processed successfully
+        """
+        hours = {
+            **self.generate_empty_request(),
+            'sunday': [
+                {
+                    'type': 'open',
+                    'value': 82800,
+                }
+            ],
+            'monday': [
+                {
+                    'type': 'close',
+                    'value': 32400,
+                }
+            ]
+        }
+        expected_result = [
+            {
+                'day_of_week': 'monday',
+                'hours': [],
+                'is_open': False
+            },
+            {
+                'day_of_week': 'sunday',
+                'hours': [
+                    {
+                        'open': 82800,
+                        'close': 32400,
+                    }
+                ],
+                'is_open': True
+            },
+        ]
+        expected_result = self.update_response_list(
+            self.generate_empty_response(),
+            expected_result)
+        self.assertEqual(clean(hours), expected_result)
 
     def test_days_of_week_are_in_the_right_order(self):
         """
         Days of week are stored in the right order: from monday to sunday
         """
-        opening_hours = {
+        hours = {
+            **self.generate_empty_request(),
             'friday': [
                 {
                     'type': 'open',
@@ -135,7 +211,7 @@ class TestCleanOpeningHours(unittest.TestCase):
         expected_result = [
             {
                 'day_of_week': 'friday',
-                'opening_hours': [
+                'hours': [
                     {
                         'open': 57600,
                         'close': 82800,
@@ -145,7 +221,7 @@ class TestCleanOpeningHours(unittest.TestCase):
             },
             {
                 'day_of_week': 'saturday',
-                'opening_hours': [
+                'hours': [
                     {
                         'open': 57600,
                         'close': 82800,
@@ -154,13 +230,17 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'is_open': True
             },
         ]
-        self.assertEqual(clean(opening_hours), expected_result)
+        expected_result = self.update_response_list(
+            self.generate_empty_response(),
+            expected_result)
+        self.assertEqual(clean(hours), expected_result)
 
     def test_error_is_thrown_if_closing_hours_are_not_found(self):
         """
         Error is thrown if no closing hours found
         """
-        opening_hours = {
+        hours = {
+            **self.generate_empty_request(),
             'friday': [
                 {
                     'type': 'open',
@@ -169,13 +249,14 @@ class TestCleanOpeningHours(unittest.TestCase):
             ]
         }
         with self.assertRaises(CleanRequestError):
-            clean(opening_hours)
+            clean(hours)
 
-    def test_error_is_thrown_if_opening_hours_are_not_found(self):
+    def test_error_is_thrown_if_hours_are_not_found(self):
         """
         Error is thrown if no opening hours found
         """
-        opening_hours = {
+        hours = {
+            **self.generate_empty_request(),
             'friday': [
                 {
                     'type': 'close',
@@ -184,13 +265,14 @@ class TestCleanOpeningHours(unittest.TestCase):
             ]
         }
         with self.assertRaises(CleanRequestError):
-            clean(opening_hours)
+            clean(hours)
 
     def test_error_is_thrown_if_multiple_hours_of_the_same_type_are_found(self):
         """
         Error is thrown if multiple opening hours found one after another
         """
-        opening_hours = {
+        hours = {
+            **self.generate_empty_request(),
             'friday': [
                 {
                     'type': 'close',
@@ -203,4 +285,4 @@ class TestCleanOpeningHours(unittest.TestCase):
             ]
         }
         with self.assertRaises(CleanRequestError):
-            clean(opening_hours)
+            clean(hours)
