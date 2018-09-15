@@ -40,7 +40,7 @@ If you use python3 earlier than 3.4, make sure that [pip](https://pip.pypa.io/en
 
 ## Use app
 
-Service accepts requests on one API Endpoint: */openinghours*
+Service accepts GET requests on one API Endpoint: */openinghours*
 
 Query parameter "query" is required. The query is expected to be UTF-8 with BASE64 encoding.
 So JSON with restaurant working hours should be base64 encoded and passed as GET parameter query.
