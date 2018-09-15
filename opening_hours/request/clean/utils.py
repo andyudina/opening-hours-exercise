@@ -49,7 +49,9 @@ def get_or_throw_exception(day_name, days):
     try:
         return days[day_name]
     except KeyError:
-        raise CleanRequestError('Missing day: %s' % day_name)
+        raise CleanRequestError(
+            'Missing day: {day_name}'.\
+            format(day_name=day_name))
 
 
 def get_next_day(day_name, days):

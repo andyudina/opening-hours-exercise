@@ -40,7 +40,7 @@ def _validate_and_convert_hours_pair_to_dict(hours_pair):
     # Raise error if pair size is invalid
     if len(hours_pair) != 2:
         raise CleanRequestError(
-            'Found unmatched hours. %s' % json.dumps(hours_pair))
+            'Found unmatched hours. {}'.format(json.dumps(hours_pair)))
     # Process pair with valid size
     opening_hour, closing_hour = hours_pair
     if not is_opening_hour(opening_hour) or \
@@ -49,8 +49,10 @@ def _validate_and_convert_hours_pair_to_dict(hours_pair):
         raise CleanRequestError(
             'Invalid opening and closing hours found. '
             'Opening hour should be before closing hour. '
-            'Opening hour: %d, Closing hour: %d' % (
-                opening_hour['value'], closing_hour['value']))
+            'Opening hour: {opening_hour}, Closing hour: {closing_hour}'.\
+            format(
+                opening_hour=opening_hour['value'],
+                closing_hour=closing_hour['value']))
     return {
         'open': opening_hour['value'],
         'close': closing_hour['value']
@@ -204,9 +206,10 @@ def _try_match_opening_and_closing_hour(opening_day, closing_day):
     if not opening_hour or not closing_hour:
         raise CleanRequestError(
             'Unmatched opening and closing hours found. '
-            'Opening hours: %s. Closing hours: %s.' % (
-                opening_hour or 'Not found',
-                closing_hour or 'Not found'
+            'Opening hours: {opening_hour}. Closing hours: {closing_hour}.'.\
+            format(
+                opening_hour=opening_hour or 'Not found',
+                closing_hour=closing_hour or 'Not found'
             ))
     new_shift = {
         'open': opening_hour,
