@@ -1,6 +1,10 @@
 """Validate request schema
 """
-from jsonschema import validate
+from jsonschema import (
+    validate,
+    # ValidationError should be imported from request.validate module
+    ValidationError
+)
 
 from opening_hours.constants import DAYS_OF_WEEK
 
