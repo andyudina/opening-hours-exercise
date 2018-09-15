@@ -2,7 +2,7 @@
 """
 import unittest
 
-from opening_hours.request.query import get_query_param, QueryError
+from src.request.query import get_query_param, QueryError
 
 
 class TestGetQueryParam(unittest.TestCase):

@@ -1,7 +1,7 @@
 """Utility functions, related to request cleaning and aware of request format
 """
-from opening_hours.request.clean.exceptions import CleanRequestError
-from opening_hours.utils import (
+from src.request.clean.exceptions import CleanRequestError
+from src.utils import (
     get_next_weekday_name,
     get_previous_weekday_name)
 

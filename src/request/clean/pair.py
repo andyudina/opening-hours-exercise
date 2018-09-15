@@ -2,16 +2,16 @@
 """
 import json
 
-from opening_hours.constants import DAYS_OF_WEEK
-from opening_hours.request.clean.exceptions import CleanRequestError
-from opening_hours.request.clean.utils import (
+from src.constants import DAYS_OF_WEEK
+from src.request.clean.exceptions import CleanRequestError
+from src.request.clean.utils import (
     is_closing_hour,
     is_opening_hour,
     get_or_throw_exception,
     get_next_day,
     get_previous_day,
 )
-from opening_hours.utils import split_to_pairs
+from src.utils import split_to_pairs
 
 
 def _validate_and_convert_hours_pair_to_dict(hours_pair):

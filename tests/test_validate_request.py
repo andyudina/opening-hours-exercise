@@ -3,7 +3,7 @@
 import unittest
 from jsonschema import ValidationError
 
-from opening_hours.request.validate import validate_request
+from src.request.validate import validate_request
 from tests.utils import (
     generate_empty_request,
     generate_valid_request)

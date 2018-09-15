@@ -2,8 +2,8 @@
 """
 import unittest
 
-from opening_hours.request.clean import clean, CleanRequestError
-from opening_hours.constants import DAYS_OF_WEEK
+from src.request.clean import clean, CleanRequestError
+from src.constants import DAYS_OF_WEEK
 from tests.utils import generate_empty_request
 
 

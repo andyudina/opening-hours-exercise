@@ -1,6 +1,6 @@
 """Errors, related to request cleaning
 """
-from opening_hours.exceptions import ValueErrorWithMessage
+from src.exceptions import ValueErrorWithMessage
 
 
 class CleanRequestError(ValueErrorWithMessage):

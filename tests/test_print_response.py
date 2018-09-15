@@ -2,7 +2,7 @@
 """
 import unittest
 
-from opening_hours.response.print import print_opening_hours
+from src.response.print import print_opening_hours
 
 
 class TestPrintOpeningHours(unittest.TestCase):

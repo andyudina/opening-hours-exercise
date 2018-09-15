@@ -4,7 +4,7 @@ import base64
 import json
 import unittest
 
-from opening_hours.handler import handler
+from src.handler import handler
 
 
 def generate_response(status_code, body):

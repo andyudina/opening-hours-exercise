@@ -1,13 +1,13 @@
 """Clean opening hours
 """
-from opening_hours.constants import DAYS_OF_WEEK
-from opening_hours.request.clean.pair import (
+from src.constants import DAYS_OF_WEEK
+from src.request.clean.pair import (
     pair_hours_for_each_day,
     pair_incomplete_hours_for_subsequent_days,
 )
 
 # CleanRequestError should be imported from opening_hours.request.clean module
-from opening_hours.request.clean.exceptions import CleanRequestError
+from src.request.clean.exceptions import CleanRequestError
 
 
 def _format_hours(days):

@@ -4,11 +4,11 @@ import json
 import http
 from jsonschema import ValidationError
 
-from opening_hours.request.clean import clean, CleanRequestError
-from opening_hours.request.query import get_query_param, QueryError
-from opening_hours.request.parse import decode_and_load_json, ParseError
-from opening_hours.request.validate import validate_request
-from opening_hours.response.print import print_opening_hours
+from src.request.clean import clean, CleanRequestError
+from src.request.query import get_query_param, QueryError
+from src.request.parse import decode_and_load_json, ParseError
+from src.request.validate import validate_request
+from src.response.print import print_opening_hours
 
 
 def _create_response(status_code, body):

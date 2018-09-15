@@ -1,6 +1,6 @@
 """Print opening hours in human readable format
 """
-from opening_hours.utils import print_time
+from src.utils import print_time
 
 
 def _create_working_hours_str_for_closed_day():
