@@ -39,7 +39,7 @@ If you use python3 earlier than 3.4, make sure that [pip](https://pip.pypa.io/en
 1.2. Add installed libraries to zip file ```cd ./env/lib/python3.7/site-packages && zip -r -g ../../../../build/opening_hours.zip ./```
 
 2. Start docker daemon for aws-sam-cli
-3. Run app using aws-sam-cli ```npm run-script run```
+3. Run app using aws-sam-cli ```sam local start-api```
 
 ## Use app
 
