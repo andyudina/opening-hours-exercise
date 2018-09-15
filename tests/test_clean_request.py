@@ -21,6 +21,7 @@ def generate_empty_response():
         for day_of_week in DAYS_OF_WEEK
     ]
 
+
 def update_response_list(response, updates):
     """
     Help to update response items with information from updates list
@@ -31,6 +32,7 @@ def update_response_list(response, updates):
         updates_dict.get(day['day_of_week'], day)
         for day in response
     ]
+
 
 class TestCleanOpeningHours(unittest.TestCase):
     """Test processing opening hours request

@@ -15,6 +15,7 @@ def generate_response(status_code, body):
         'body': json.dumps(body)
     }
 
+
 def generate_request(payload):
     """Help to generate request to lambda handler
     """
@@ -23,6 +24,7 @@ def generate_request(payload):
             'query': base64.b64encode(json.dumps(payload).encode())
         }
     }
+
 
 class TestMainHandler(unittest.TestCase):
     """Test main handler response
