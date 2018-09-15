@@ -33,6 +33,16 @@ class TestGetQueryParam(unittest.TestCase):
         with self.assertRaises(QueryError):
             get_query_param(request, 'test-param')
 
+    def test_raise_query_error_if_query_string_is_empty(self):
+        """
+        Raise error if query string is empty
+        """
+        request = {
+            'queryStringParameters': None
+        }
+        with self.assertRaises(QueryError):
+            get_query_param(request, 'test-param')
+
     def test_raise_key_error_if_request_format_is_invalid(self):
         """
         Raise key error if query string parameters are missing in request.

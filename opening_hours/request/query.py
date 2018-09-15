@@ -25,7 +25,7 @@ def get_query_param(request, query_param):
     query_string_params = request['queryStringParameters']
     try:
         return query_string_params[query_param]
-    except KeyError:
+    except (KeyError, TypeError):
         raise QueryError(
             'Query parameter "{parameter}" is missing'.
             format(parameter=query_param))
