@@ -5,12 +5,12 @@ Resources:
   OpeningHours:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: lambda.handler
-      Runtime: python2.7
-      CodeUri: './opening_hours'
+      Handler: opening_hours.handler.handler
+      Runtime: python3.6
+      CodeUri: './build/opening_hours.zip'
       Events:
         Api:
           Type: Api
           Properties:
-            Path: /openinghours
+            Path: /openinghours/
             Method: get
