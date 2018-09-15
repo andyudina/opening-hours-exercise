@@ -34,7 +34,7 @@ def get_next_weekday_name(day_name):
     """
     current_day_index = DAYS_OF_WEEK_WITH_ORDER[day_name]
     next_day_index = current_day_index + 1
-    if next_day_index > len(DAYS_OF_WEEK):
+    if next_day_index >= len(DAYS_OF_WEEK):
         next_day_index = 0
     return DAYS_OF_WEEK[next_day_index]
 
