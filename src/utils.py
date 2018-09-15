@@ -63,3 +63,13 @@ def print_time(timestamp):
         hour=hour,
         period=time.strftime('%p', _time)
     )
+
+
+def filter_empty_keys(dict_):
+    """Filter out keys from dict which values are None
+    """
+    return {
+        key: value
+        for key, value in dict_.items()
+        if value is not None
+    }
