@@ -50,7 +50,7 @@ def get_or_throw_exception(day_name, days):
         return days[day_name]
     except KeyError:
         raise CleanRequestError(
-            'Missing day: {day_name}'.\
+            'Missing day: {day_name}'.
             format(day_name=day_name))
 
 

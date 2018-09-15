@@ -49,7 +49,7 @@ def _validate_and_convert_hours_pair_to_dict(hours_pair):
         raise CleanRequestError(
             'Invalid opening and closing hours found. '
             'Opening hour should be before closing hour. '
-            'Opening hour: {opening_hour}, Closing hour: {closing_hour}'.\
+            'Opening hour: {opening_hour}, Closing hour: {closing_hour}'.
             format(
                 opening_hour=opening_hour['value'],
                 closing_hour=closing_hour['value']))
@@ -206,7 +206,7 @@ def _try_match_opening_and_closing_hour(opening_day, closing_day):
     if not opening_hour or not closing_hour:
         raise CleanRequestError(
             'Unmatched opening and closing hours found. '
-            'Opening hours: {opening_hour}. Closing hours: {closing_hour}.'.\
+            'Opening hours: {opening_hour}. Closing hours: {closing_hour}.'.
             format(
                 opening_hour=opening_hour or 'Not found',
                 closing_hour=closing_hour or 'Not found'
