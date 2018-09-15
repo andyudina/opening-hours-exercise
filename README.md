@@ -22,7 +22,7 @@ If you use python3 earlier than 3.4, make sure that [pip](https://pip.pypa.io/en
 
 1. Clone this repo ```git clone git@github.com:andyudina/opening-hours-exercise.git```
 2. Create python environment ```virtualenv env``` and activate it ```source ./env/bin/activate```
-2. Install dependencies with pip ```pip3 install -r requirements.txt``
+2. Install dependencies with pip ```pip3 install -r requirements.txt```
 
 ### Run tests
 
