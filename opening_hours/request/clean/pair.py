@@ -3,7 +3,7 @@
 import json
 
 from opening_hours.constants import DAYS_OF_WEEK
-from opening_hours.request.clean.errors import CleanRequestError
+from opening_hours.request.clean.exceptions import CleanRequestError
 from opening_hours.request.clean.utils import (
     is_closing_hour,
     is_opening_hour,

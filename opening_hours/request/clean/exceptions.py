@@ -1,8 +1,9 @@
 """Errors, related to request cleaning
 """
+from opening_hours.exceptions import ValueErrorWithMessage
 
 
-class CleanRequestError(Exception):
+class CleanRequestError(ValueErrorWithMessage):
     """Error to be raised if cleaning request failed
     because of invalid format
     """

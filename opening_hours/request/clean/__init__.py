@@ -7,7 +7,7 @@ from opening_hours.request.clean.pair import (
 )
 
 # CleanRequestError should be imported from opening_hours.request.clean module
-from opening_hours.request.clean.errors import CleanRequestError
+from opening_hours.request.clean.exceptions import CleanRequestError
 
 def _format_hours(days):
     """Transform opening hours of each day to easy printable format

@@ -1,8 +1,9 @@
 """Parse request query params
 """
+from opening_hours.exceptions import ValueErrorWithMessage
 
 
-class QueryError(Exception):
+class QueryError(ValueErrorWithMessage):
     """Error to be raised if parsing query params failed
     """
     pass
