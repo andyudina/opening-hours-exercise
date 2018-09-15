@@ -8,6 +8,7 @@ class QueryError(ValueErrorWithMessage):
     """
     pass
 
+
 def get_query_param(request, query_param):
     """Get query parameter value from request
 
@@ -26,5 +27,5 @@ def get_query_param(request, query_param):
         return query_string_params[query_param]
     except KeyError:
         raise QueryError(
-            'Query parameter "{parameter}" is missing'.\
+            'Query parameter "{parameter}" is missing'.
             format(parameter=query_param))

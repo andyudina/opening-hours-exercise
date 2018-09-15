@@ -7,41 +7,41 @@ from opening_hours.constants import DAYS_OF_WEEK
 from tests.utils import generate_empty_request
 
 
+def generate_empty_response():
+    """
+    Help to generate cleaned request where all days don't have
+    opening or closing hours
+    """
+    return [
+        {
+            'day_of_week': day_of_week,
+            'hours': [],
+            'is_open': False
+        }
+        for day_of_week in DAYS_OF_WEEK
+    ]
+
+def update_response_list(response, updates):
+    """
+    Help to update response items with information from updates list
+    Merges using day_of_name as a key
+    """
+    updates_dict = {update['day_of_week']: update for update in updates}
+    return [
+        updates_dict.get(day['day_of_week'], day)
+        for day in response
+    ]
+
 class TestCleanOpeningHours(unittest.TestCase):
     """Test processing opening hours request
     """
-
-    def generate_empty_response(self):
-        """
-        Help to generate cleaned request where all days don't have
-        opening or closing hours
-        """
-        return [
-            {
-                'day_of_week': day_of_week,
-                'hours': [],
-                'is_open': False
-            }
-            for day_of_week in DAYS_OF_WEEK
-        ]
-
-    def update_response_list(self, response, updates):
-        """
-        Help to update response items with information from updates list
-        Merges using day_of_name as a key
-        """
-        updates_dict = { update['day_of_week']: update for update in updates }
-        return [
-            updates_dict.get(day['day_of_week'], day)
-            for day in response
-        ]
 
     def test_empty_hours_processed_successfully(self):
         """
         Days when restaurant is closed are processed successfully
         """
         hours = generate_empty_request()
-        expected_result = self.generate_empty_response()
+        expected_result = generate_empty_response()
         self.assertEqual(clean(hours), expected_result)
 
     def test_multiple_hours_during_same_day_processed_successfully(self):
@@ -86,8 +86,8 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'is_open': True
             }
         ]
-        expected_result = self.update_response_list(
-            self.generate_empty_response(),
+        expected_result = update_response_list(
+            generate_empty_response(),
             expected_result)
         self.assertEqual(clean(hours), expected_result)
 
@@ -128,8 +128,8 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'is_open': False
             }
         ]
-        expected_result = self.update_response_list(
-            self.generate_empty_response(),
+        expected_result = update_response_list(
+            generate_empty_response(),
             expected_result)
         self.assertEqual(clean(hours), expected_result)
 
@@ -170,8 +170,8 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'is_open': True
             },
         ]
-        expected_result = self.update_response_list(
-            self.generate_empty_response(),
+        expected_result = update_response_list(
+            generate_empty_response(),
             expected_result)
         self.assertEqual(clean(hours), expected_result)
 
@@ -224,8 +224,8 @@ class TestCleanOpeningHours(unittest.TestCase):
                 'is_open': True
             },
         ]
-        expected_result = self.update_response_list(
-            self.generate_empty_response(),
+        expected_result = update_response_list(
+            generate_empty_response(),
             expected_result)
         self.assertEqual(clean(hours), expected_result)
 
@@ -261,7 +261,8 @@ class TestCleanOpeningHours(unittest.TestCase):
         with self.assertRaises(CleanRequestError):
             clean(hours)
 
-    def test_error_is_thrown_if_multiple_hours_of_the_same_type_are_found(self):
+    def test_error_is_thrown_if_multiple_hours_of_the_same_type_are_found(
+            self):
         """
         Error is thrown if multiple opening hours found one after another
         """

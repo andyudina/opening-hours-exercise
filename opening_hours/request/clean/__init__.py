@@ -1,4 +1,4 @@
-"""Clean opening hours 
+"""Clean opening hours
 """
 from opening_hours.constants import DAYS_OF_WEEK
 from opening_hours.request.clean.pair import (
@@ -8,6 +8,7 @@ from opening_hours.request.clean.pair import (
 
 # CleanRequestError should be imported from opening_hours.request.clean module
 from opening_hours.request.clean.exceptions import CleanRequestError
+
 
 def _format_hours(days):
     """Transform opening hours of each day to easy printable format
@@ -55,18 +56,19 @@ def _format_hours(days):
         DAYS_OF_WEEK)
     return list(days_formated)
 
+
 def clean(days):
     """Transform JSON request with opening hours to simplify further processing
 
     Args:
        days (dict): Valid dictionary with opening hours:
        Format:
-       { 
+       {
             'day_of_week': [
                 {
                     'type': str, 'value': int
                 }
-            ] 
+            ]
         }
 
     Returns:

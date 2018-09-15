@@ -2,11 +2,12 @@
 """
 import json
 import http
+from jsonschema import ValidationError
 
 from opening_hours.request.clean import clean, CleanRequestError
 from opening_hours.request.query import get_query_param, QueryError
 from opening_hours.request.parse import decode_and_load_json, ParseError
-from opening_hours.request.validate import validate_request, ValidationError
+from opening_hours.request.validate import validate_request
 from opening_hours.response.print import print_opening_hours
 
 
@@ -18,6 +19,7 @@ def _create_response(status_code, body):
         'body': json.dumps(body)
     }
 
+
 def _create_error_response(status_code, error_message):
     """Create response with status code from args request
     and JSON body: { "error": error_message }
@@ -27,29 +29,33 @@ def _create_error_response(status_code, error_message):
     }
     return _create_response(status_code, body)
 
+
 def _create_bad_request_response(error_message):
     """Create response with status code 400 bad request
     and JSON body: { "error": error_message }
     """
     return _create_error_response(
-        status_code=http.client.BAD_REQUEST, error_message=error_message)
+        status_code=http.HTTPStatus.BAD_REQUEST, error_message=error_message)
+
 
 def _create_unprocessable_entity_response(error_message):
     """Create response with status code 422 unprocessable entity
     and JSON body: { "error": error_message }
     """
     return _create_error_response(
-        status_code=http.client.UNPROCESSABLE_ENTITY,
+        status_code=http.HTTPStatus.UNPROCESSABLE_ENTITY,
         error_message=error_message)
+
 
 def _create_successfull_resonse(body):
     """Create response with status code 200 ok
     and JSON body received as argument
     """
     return _create_response(
-        status_code=http.client.OK, body=body)
+        status_code=http.HTTPStatus.OK, body=body)
 
-def handler(event, context):
+
+def handler(event, _):
     """Main API handler.
 
     Convert opening hours from request to human readable format
@@ -63,7 +69,6 @@ def handler(event, context):
             }
         ]
         Query is base64 encoded JSON with opening hours
-        context (dict): Context provided by AWS Lambda. Not used.
 
     Returns:
         Response dict. Format:

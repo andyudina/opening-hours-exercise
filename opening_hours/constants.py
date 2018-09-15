@@ -1,3 +1,6 @@
+"""Weekdays names and order numbers
+"""
+
 DAYS_OF_WEEK = [
     'monday', 'tuesday', 'wednesday',
     'thursday', 'friday', 'saturday', 'sunday'

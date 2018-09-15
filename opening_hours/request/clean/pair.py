@@ -50,11 +50,12 @@ def _validate_and_convert_hours_pair_to_dict(hours_pair):
             'Invalid opening and closing hours found. '
             'Opening hour should be before closing hour. '
             'Opening hour: %d, Closing hour: %d' % (
-            opening_hour['value'], closing_hour['value']))
-    return  {
+                opening_hour['value'], closing_hour['value']))
+    return {
         'open': opening_hour['value'],
         'close': closing_hour['value']
     }
+
 
 def _pair_opening_and_closing_hours(hours):
     """Group hours into pairs
@@ -89,14 +90,14 @@ def _pair_opening_and_closing_hours(hours):
     """
     # Check if first hour is unmatched closing hour
     unmatched_closing_hour = None
-    if len(hours) and is_closing_hour(hours[0]):
+    if hours and is_closing_hour(hours[0]):
         # First hour type is closing. Apparently previous day was not closed
         unmatched_closing_hour = hours[0]['value']
         # Remove closing hours of previous day from list
         hours = hours[1:]
     # Check if last hour is unmatched opening hour
     unmatched_opening_hour = None
-    if len(hours) and is_opening_hour(hours[-1]):
+    if hours and is_opening_hour(hours[-1]):
         # Last hour type is closing. Apparently current day is not closed
         unmatched_opening_hour = hours[-1]['value']
         # Remove closing hours of previous day from list
@@ -112,6 +113,7 @@ def _pair_opening_and_closing_hours(hours):
         'unmatched_closing_hour': unmatched_closing_hour
     }
 
+
 def pair_hours_for_each_day(days):
     """Group hours for each day in pairs of opening and closing hours
 
@@ -121,12 +123,12 @@ def pair_hours_for_each_day(days):
     Args:
        days (dict): Valid dictionary with opening and closing hours by days.
        Format:
-       { 
+       {
             'day_of_week': [
                 {
                     'type': str, 'value': int
                 }
-            ] 
+            ]
         }
 
     Returns:
@@ -148,6 +150,7 @@ def pair_hours_for_each_day(days):
         lambda day: (day[0], _pair_opening_and_closing_hours(day[1])),
         days.items())
     return dict(days_processed)
+
 
 def _try_match_opening_and_closing_hour(opening_day, closing_day):
     """Attempt matching closing hours of the second day (closing day)
@@ -212,14 +215,15 @@ def _try_match_opening_and_closing_hour(opening_day, closing_day):
     opening_day_hours = opening_day['hours'] + [new_shift]
     return \
         {
-            **opening_day, 
-            'unmatched_opening_hour': None, 
+            **opening_day,
+            'unmatched_opening_hour': None,
             'hours': opening_day_hours
         }, \
         {
             **closing_day,
             'unmatched_closing_hour': None
         }
+
 
 def pair_incomplete_hours_for_subsequent_days(days):
     """Pair unmatched opening and closing hours if found

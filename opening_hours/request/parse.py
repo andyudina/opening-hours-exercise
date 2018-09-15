@@ -12,10 +12,11 @@ class ParseError(ValueErrorWithMessage):
     """
     pass
 
+
 def decode_and_load_json(query):
     """Decode query from base64
 
-    Throws ParseError if base64 or json is invalid 
+    Throws ParseError if base64 or json is invalid
 
     Args:
         query (str): json request decoded as base64

@@ -1,10 +1,6 @@
 """Validate request schema
 """
-from jsonschema import (
-    validate,
-    # ValidationError should be imported from request.validate module
-    ValidationError
-)
+from jsonschema import validate
 
 from opening_hours.constants import DAYS_OF_WEEK
 
@@ -23,7 +19,7 @@ ONE_DAY_SCHEMA = {
             "value": {
                 "type": "number",
                 "minimum": 0,
-                "maximum": 86399, # Max value for working hour (11.59:59 PM)
+                "maximum": 86399,  # Max value for working hour (11.59:59 PM)
                 "exclusiveMaximum": False
             },
         },
@@ -40,9 +36,10 @@ WORKING_HOURS_SCHEMA = {
     "required": DAYS_OF_WEEK
 }
 
+
 def validate_request(request):
     """Validate request using jsonschema
 
-    Raises ValidationError if request is invalid
+    Raises jsonschema.ValidationError if request is invalid
     """
     validate(request, WORKING_HOURS_SCHEMA)

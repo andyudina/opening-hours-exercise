@@ -20,6 +20,7 @@ def is_closing_hour(hour):
     """
     return hour['type'] == 'close'
 
+
 def is_opening_hour(hour):
     """Validate if hour is open
 
@@ -33,6 +34,7 @@ def is_opening_hour(hour):
         Boolean flag, that shows if hour is closing
     """
     return hour['type'] == 'open'
+
 
 def get_or_throw_exception(day_name, days):
     """Get day by name from days and throw exception if day was not found
@@ -49,9 +51,10 @@ def get_or_throw_exception(day_name, days):
     except KeyError:
         raise CleanRequestError('Missing day: %s' % day_name)
 
+
 def get_next_day(day_name, days):
     """Retrieve next weekday from days dict
-    
+
     Args:
         day_name (str): Name of current weekday
         days (dict): Dict with all weekdays
@@ -63,9 +66,10 @@ def get_next_day(day_name, days):
     next_day_name = get_next_weekday_name(day_name)
     return next_day_name, get_or_throw_exception(next_day_name, days)
 
+
 def get_previous_day(day_name, days):
     """Retrieve previous weekday from days dict
-    
+
     Args:
         day_name (str): Name of current weekday
         days (dict): Dict with all weekdays

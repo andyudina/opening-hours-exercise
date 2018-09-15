@@ -13,9 +13,9 @@ class TestParseRequest(unittest.TestCase):
         """
         Valid request passes validation
         """
-        request = 'eyJ0ZXN0IjogInRlc3QifQ==' # { "test": "test" }
+        request = 'eyJ0ZXN0IjogInRlc3QifQ=='  # { "test": "test" }
         self.assertEqual(
-            decode_and_load_json(request), { 'test': 'test' })
+            decode_and_load_json(request), {'test': 'test'})
 
     def test_parse_error_raised_if_base64_encoding_is_invalid(self):
         """
@@ -29,6 +29,6 @@ class TestParseRequest(unittest.TestCase):
         """
         Raise ParseError if can not parse JSON
         """
-        request = 'eyJ0ZXN0IjogInRlc3QifX0=' # {"test": "test"}}
+        request = 'eyJ0ZXN0IjogInRlc3QifX0='  # {"test": "test"}}
         with self.assertRaises(ParseError):
             decode_and_load_json(request)

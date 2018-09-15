@@ -8,6 +8,7 @@ def _create_working_hours_str_for_closed_day():
     """
     return 'Closed'
 
+
 def _create_str_with_working_hours(working_hours):
     """Create working hours description
 
@@ -29,13 +30,14 @@ def _create_str_with_working_hours(working_hours):
         Create description for one shift.
         """
         return '{opening_hour} - {closing_hour}'.format(
-            opening_hour = print_time(shift['open']),
-            closing_hour = print_time(shift['close'])
+            opening_hour=print_time(shift['open']),
+            closing_hour=print_time(shift['close'])
         )
     return ', '.join([
         _create_str_for_one_shift(shift)
         for shift in working_hours
     ])
+
 
 def _print_working_hours_for_one_day(day):
     """Print working hours for one day in human readable format
@@ -64,8 +66,9 @@ def _print_working_hours_for_one_day(day):
     else:
         working_hours = _create_working_hours_str_for_closed_day()
     return '{day_of_week}: {working_hours}'.format(
-        day_of_week = day_of_week,
-        working_hours = working_hours)
+        day_of_week=day_of_week,
+        working_hours=working_hours)
+
 
 def print_opening_hours(days):
     """Print opening hours to string in human readable format
