@@ -201,7 +201,7 @@ def _try_match_opening_and_closing_hour(opening_day, closing_day):
     if not opening_hour or not closing_hour:
         raise CleanRequestError(
             'Unmatched opening and closing hours found. '
-            'Opening hours: %s. Closing hours: %s. ' % (
+            'Opening hours: %s. Closing hours: %s.' % (
                 opening_hour or 'Not found',
                 closing_hour or 'Not found'
             ))
