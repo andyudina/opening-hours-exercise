@@ -3,9 +3,7 @@
 Responsible for week creation and printing in human readable format.
 Group shifts that start on one day and end on another
 """
-from first import first
-
-from src.utils import filter_empty_keys
+from src.utils import filter_dict_items
 from src.working_hours.constants import WEEKDAYS
 from src.working_hours.exceptions import WorkingHoursError
 from src.working_hours.shift import Shift
@@ -106,24 +104,16 @@ class Week:
             Keys are weekday names and values are incomplete shifts
             Values can be None
         """
-        # Split shifts into to dicts:
+        # Split shifts into two dicts:
         # for shifts with opening hour and for shifts with closing hour
         # Create dict for shifts with open hours
-        shifts_with_opening_hour = {
-            weekday: first(
-                [shift for shift in shifts if shift.need_closing_hour()]
-            )
-            for weekday, shifts in weekdays_with_incomplete_shifts.items()
-        }
-        shifts_with_opening_hour = filter_empty_keys(shifts_with_opening_hour)
+        shifts_with_opening_hour = filter_dict_items(
+            weekdays_with_incomplete_shifts,
+            lambda shift: shift.need_closing_hour())
         # Create dict for shifts with close hour
-        shifts_with_closing_hour = {
-            weekday: first(
-                [shift for shift in shifts if shift.need_opening_hour()]
-            )
-            for weekday, shifts in weekdays_with_incomplete_shifts.items()
-        }
-        shifts_with_closing_hour = filter_empty_keys(shifts_with_closing_hour)
+        shifts_with_closing_hour = filter_dict_items(
+            weekdays_with_incomplete_shifts,
+            lambda shift: shift.need_opening_hour())
         # Try find closing hour for opening hour
         for weekday_name, shift in shifts_with_opening_hour.items():
             if not shift:
