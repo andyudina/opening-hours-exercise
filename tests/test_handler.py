@@ -130,10 +130,10 @@ class TestMainHandler(unittest.TestCase):
             body=expected_response_body)
         self.assertEqual(response, expected_response)
 
-    def test_clean_request_failed(self):
+    def test_create_week_failed(self):
         """
         We return 422 unprocessable entity and error message
-        if request can not be cleaned
+        if we can not create week from json in request
         """
         request_payload = {
             'monday': [],
@@ -156,8 +156,7 @@ class TestMainHandler(unittest.TestCase):
         request = generate_request(payload=request_payload)
         response = handler(request, None)
         expected_response_body = {
-            'error': 'Unmatched opening and closing hours found. '
-                     'Opening hours: 43200. Closing hours: Not found.'
+            'error': 'Missing day: monday'
         }
         expected_response = generate_response(
             status_code=422,

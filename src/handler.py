@@ -4,11 +4,10 @@ import json
 import http
 from jsonschema import ValidationError
 
-from src.request.clean import clean, CleanRequestError
 from src.request.query import get_query_param, QueryError
 from src.request.parse import decode_and_load_json, ParseError
 from src.request.validate import validate_request
-from src.response.print import print_opening_hours
+from src.working_hours import Week, WorkingHoursError
 
 
 def _create_response(status_code, body):
@@ -96,10 +95,12 @@ def handler(event, _):
     # We want to fail fast if event format has changed
     # 500 server error response and logging will be handled by AWS Lambda
     try:
-        working_hours = clean(decoded_request)
-    except CleanRequestError as err:
+        working_hours_in_human_readable_format = Week.\
+            create_week_from_json(decoded_request).\
+            to_human_readable_format()
+    except WorkingHoursError as err:
         return _create_unprocessable_entity_response(err.message)
     response_body = {
-        'working_hours': print_opening_hours(working_hours)
+        'working_hours': working_hours_in_human_readable_format
     }
     return _create_successfull_resonse(response_body)
