@@ -36,6 +36,11 @@ If you use python3 earlier than 3.4, make sure that [pip](https://pip.pypa.io/en
 
 Make sure that you have internet connection - needed to download docker image.
 
+### Encode input to base64
+
+```python3 scripts/convert_to_base64.py [path/to/file-with-payload]```
+Make sure that ```[path/to/file-with-payload]``` is replaced with actual path to file with input in JSON format.
+
 ## Use app
 
 Service accepts GET requests on one API Endpoint: */openinghours*
