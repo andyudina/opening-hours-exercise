@@ -30,14 +30,7 @@ If you use python3 earlier than 3.4, make sure that [pip](https://pip.pypa.io/en
 
 ### Run locally
 
-1. Package code:
-
-1.0. Create build directory ```mkdir build```
-
-1.1. Zip opening_hours own code ```zip -r ./build/opening_hours.zip ./src```
-
-1.2. Add installed libraries to zip file ```cd ./env/lib/python[your-python-version]/site-packages && zip -r -g ../../../../build/opening_hours.zip ./``` Make sure you've replaced [your-python-version] with version of python that you use.
-
+1. Package code: ```python3 scripts/package.py build/opening_hours```
 2. Start docker daemon for aws-sam-cli
 3. Run app using aws-sam-cli ```sam local start-api```
 
