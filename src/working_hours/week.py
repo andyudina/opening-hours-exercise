@@ -52,13 +52,11 @@ class Week:
     def to_human_readable_format(self):
         """Return string with week working hours
         """
-        return '\n'.join(
-            [
-                getattr(self, weekday).to_human_readable_format()
-                for weekday in WEEKDAYS
-                if getattr(self, weekday)
-            ]
-        )
+        return [
+            getattr(self, weekday).to_human_readable_format()
+            for weekday in WEEKDAYS
+            if getattr(self, weekday)
+        ]
 
     @classmethod
     def create_week_from_json(cls, working_hours_json):

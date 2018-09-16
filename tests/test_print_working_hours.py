@@ -50,8 +50,10 @@ class TestPrintOpeningHours(unittest.TestCase):
                 'hours': [],
             }
         ]
-        expected_message = 'Saturday: Closed'
-        self.assertEqual(print_working_hours(days), expected_message)
+        expected_message = [
+            'Saturday: Closed'
+        ]
+        self.assertListEqual(print_working_hours(days), expected_message)
 
     def test_print_working_hours_for_multiple_days(self):
         """
@@ -77,8 +79,11 @@ class TestPrintOpeningHours(unittest.TestCase):
                 ],
             }
         ]
-        expected_message = 'Tuesday: 10 AM - 6 PM\nWednesday: 10 AM - 6 PM'
-        self.assertEqual(print_working_hours(days), expected_message)
+        expected_message = [
+            'Tuesday: 10 AM - 6 PM',
+            'Wednesday: 10 AM - 6 PM',
+        ]
+        self.assertListEqual(print_working_hours(days), expected_message)
 
     def test_multiple_shifts_in_one_day_are_printed_successfully(self):
         """
@@ -99,5 +104,7 @@ class TestPrintOpeningHours(unittest.TestCase):
                 ],
             },
         ]
-        expected_message = 'Monday: 6 AM - 11 AM, 4 PM - 9 PM'
-        self.assertEqual(print_working_hours(days), expected_message)
+        expected_message = [
+            'Monday: 6 AM - 11 AM, 4 PM - 9 PM'
+        ]
+        self.assertListEqual(print_working_hours(days), expected_message)

@@ -48,7 +48,13 @@ So JSON with restaurant working hours should be base64 encoded and passed as GET
 - Response body:
 ```json
 { 
-  "working_hours": "working hours in human readable format", 
+  "working_hours": {
+    "type": "array",
+    "items": {
+      "type": "string",
+      "description" : "Working hours for one day in human-readable format"
+    }
+  }
 }
 ```
 
@@ -57,7 +63,7 @@ So JSON with restaurant working hours should be base64 encoded and passed as GET
 - Response body:
 ```json
 { 
-  "error": "error message", 
+  "error": "string", 
 }
 ```
 
@@ -128,5 +134,13 @@ Should be passed in base64 format as:
 And the response will be:
 ```json
 { 
-  "working_hours": "Monday: Closed\nTuesday: 10 AM - 6 PM\nWednesday: Closed\nThursday: 10 AM - 6 PM\nFriday: 10 AM - 1 AM\nSaturday: 10 AM - 1 AM\nSunday: 12 PM - 9 PM"
+  "working_hours": [
+    "Monday: Closed",
+    "Tuesday: 10 AM - 6 PM", 
+    "Wednesday: Closed",
+    "Thursday: 10 AM - 6 PM",
+    "Friday: 10 AM - 1 AM",
+    "Saturday: 10 AM - 1 AM",
+    "Sunday: 12 PM - 9 PM"
+  ]
 }

@@ -92,7 +92,7 @@ class TestMainHandler(unittest.TestCase):
         request = generate_request(payload=request_payload)
         response = handler(request, None)
         expected_response_body = {
-            'working_hours': '\n'.join([
+            'working_hours': [
                 'Monday: Closed',
                 'Tuesday: 10 AM - 6 PM',
                 'Wednesday: Closed',
@@ -100,7 +100,7 @@ class TestMainHandler(unittest.TestCase):
                 'Friday: 10 AM - 1 AM',
                 'Saturday: 10 AM - 1 AM',
                 'Sunday: 12 PM - 9 PM'
-            ])
+            ]
         }
         expected_response = generate_response(
             status_code=200,
