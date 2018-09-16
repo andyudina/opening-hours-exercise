@@ -11,3 +11,6 @@ build/
 
 # Virtualenv
 env
+
+# File with test payload
+working_hours.json
