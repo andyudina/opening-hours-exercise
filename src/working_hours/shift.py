@@ -10,13 +10,17 @@ from src.working_hours.utils import (
     is_closing_hour,
     is_opening_hour,
 )
-from src.utils import split_to_pairs
+from src.utils import (
+    split_to_pairs,
+    print_time
+)
 
 
 class Shift:
     """
     Restaurant working shift. Described by opening and closing hours.
-    Opening and closing hours can be on the same day or on the subsequent days. Shift can be incomplete, i.e. either opening or closing hour is None.
+    Opening and closing hours can be on the same day or on the subsequent days.
+    Shift can be incomplete, i.e. either opening or closing hour is None.
 
     Attributes:
         open (int): UNIX time, that shows when shift starts
@@ -44,6 +48,14 @@ class Shift:
         """Return dict, created from object fields
         """
         return self.__dict__
+
+    def to_human_readable_format(self):
+        """Return string with shift opening and closing hours
+        """
+        return '{opening_hour} - {closing_hour}'.format(
+            opening_hour=print_time(self.open),
+            closing_hour=print_time(self.close)
+        )
 
     @classmethod
     def create_shifts_from_json(cls, hours):
@@ -87,7 +99,7 @@ class Shift:
         # Process other hours
         opening_and_closing_hour_pairs = split_to_pairs(hours)
         shifts = list(map(
-            lambda hour_pair: cls._try_convert_hours_pair_to_shift(hour_pair),
+            cls._try_convert_hours_pair_to_shift,
             opening_and_closing_hour_pairs))
         return incomplete_shifts, shifts
 

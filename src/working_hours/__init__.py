@@ -5,4 +5,6 @@
 - Print working hour in human readable format
 """
 from src.working_hours.exceptions import WorkingHoursError
+from src.working_hours.shift import Shift
 from src.working_hours.week import Week
+from src.working_hours.weekday import Weekday

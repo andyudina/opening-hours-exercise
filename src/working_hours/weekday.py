@@ -24,10 +24,10 @@ class Weekday:
         self.shifts = shifts or []
 
     @property
-    def is_open(self):
-        """Returns flag to show if restaurant is open during this weekday
+    def is_closed(self):
+        """Returns flag to show if restaurant is close during this weekday
         """
-        return not not self.shifts
+        return not self.shifts
 
     def add_shift(self, shift):
         """Append shift to own shifts list
@@ -42,8 +42,30 @@ class Weekday:
             'hours': [
                 shift.to_dict() for shift in self.shifts
             ],
-            'is_open': self.is_open,
+            'is_open': not self.is_closed,
         }
+
+    def to_human_readable_format(self):
+        """Return string with weekday working hours in human-readable format.
+        For example: "Monday: 8 AM - 1 PM, 6 PM - 1 PM"
+        """
+        shifts = self._get_shifts_in_human_readable_format()
+        return '{day_of_week}: {shifts}'.format(
+            day_of_week=self.name.capitalize(),
+            shifts=shifts)
+
+    def _get_shifts_in_human_readable_format(self):
+        """Return string with current weekday shifts in human-readable format.
+        For example: "8 AM - 1 PM, 6 PM - 1 PM"
+        """
+        if self.is_closed:
+            return 'Closed'
+        return ', '.join(
+            [
+                shift.to_human_readable_format()
+                for shift in self.shifts
+            ]
+        )
 
     @classmethod
     def create_weekday_from_json(cls, weekday_name, weekday_hours):

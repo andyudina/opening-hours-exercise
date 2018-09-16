@@ -3,13 +3,10 @@
 Responsible for week creation and printing in human readable format.
 Group shifts that start on one day and end on another
 """
-import itertools
 from first import first
 
 from src.utils import filter_empty_keys
-from src.working_hours.constants import (
-    WEEKDAYS,
-    WEEKDAYS_WITH_ORDER)
+from src.working_hours.constants import WEEKDAYS
 from src.working_hours.exceptions import WorkingHoursError
 from src.working_hours.shift import Shift
 from src.working_hours.utils import (
@@ -49,7 +46,19 @@ class Week:
         return [
             getattr(self, weekday).to_dict()
             for weekday in WEEKDAYS
+            if getattr(self, weekday)
         ]
+
+    def to_human_readable_format(self):
+        """Return string with week working hours
+        """
+        return '\n'.join(
+            [
+                getattr(self, weekday).to_human_readable_format()
+                for weekday in WEEKDAYS
+                if getattr(self, weekday)
+            ]
+        )
 
     @classmethod
     def create_week_from_json(cls, working_hours_json):
@@ -137,4 +146,3 @@ class Week:
         if shifts_with_closing_hour:
             raise WorkingHoursError(
                 'Found closing hours without corresponding opening hours')
-        return None
