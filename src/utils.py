@@ -2,17 +2,15 @@
 """
 import time
 
-from opening_hours.constants import (
+from src.constants import (
     DAYS_OF_WEEK,
     DAYS_OF_WEEK_WITH_ORDER)
 
 
 def split_to_pairs(seq):
     """Split list into sublists with length == 2
-
     Args:
         seq (list): List to be split
-
     Returns:
         List of sublists with
     """
@@ -22,14 +20,11 @@ def split_to_pairs(seq):
 
 def get_next_weekday_name(day_name):
     """Get name of next weekday
-
     Throws KeyError if day_name is not valid weekday name
-
     Args:
         day_name (str): Name of current weekday.
         Accepted names: 'monday', 'tuesday', 'wednesday', 'thursday',
                         'friday', 'saturday', 'sunday'
-
     Returns:
         Name of the next weekday
     """
@@ -42,14 +37,11 @@ def get_next_weekday_name(day_name):
 
 def get_previous_weekday_name(day_name):
     """Get name of previous weekday
-
     Throws KeyError if day_name is not valid weekday name
-
     Args:
         day_name (str): Name of current weekday
         Accepted names: 'monday', 'tuesday', 'wednesday', 'thursday',
                         'friday', 'saturday', 'sunday'
-
     Returns:
         Name of the previous weekday
     """
@@ -60,10 +52,8 @@ def get_previous_weekday_name(day_name):
 
 def print_time(timestamp):
     """Print time in 12-hour clock format
-
     Args:
         timestamp (int): Unix time (1.1.1970 as date)
-
     Return:
         String, representing current time, in 12-hour clock format
     """
@@ -73,3 +63,13 @@ def print_time(timestamp):
         hour=hour,
         period=time.strftime('%p', _time)
     )
+
+
+def filter_empty_keys(dict_):
+    """Filter out keys from dict which values are None
+    """
+    return {
+        key: value
+        for key, value in dict_.items()
+        if value is not None
+    }

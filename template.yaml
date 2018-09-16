@@ -5,7 +5,7 @@ Resources:
   OpeningHours:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: opening_hours.handler.handler
+      Handler: src.handler.handler
       Runtime: python3.6
       CodeUri: './build/opening_hours.zip'
       Events:

@@ -1,6 +1,6 @@
 """Misc utils for tests
 """
-from opening_hours.constants import DAYS_OF_WEEK
+from src.constants import DAYS_OF_WEEK
 
 
 def generate_empty_request():

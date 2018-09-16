@@ -2,7 +2,7 @@
 """
 from jsonschema import validate
 
-from opening_hours.constants import DAYS_OF_WEEK
+from src.constants import DAYS_OF_WEEK
 
 
 # JSON schema for working hours request

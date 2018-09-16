@@ -1,6 +1,6 @@
 """Parse request query params
 """
-from opening_hours.exceptions import ValueErrorWithMessage
+from src.exceptions import ValueErrorWithMessage
 
 
 class QueryError(ValueErrorWithMessage):

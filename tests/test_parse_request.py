@@ -2,7 +2,7 @@
 """
 import unittest
 
-from opening_hours.request.parse import decode_and_load_json, ParseError
+from src.request.parse import decode_and_load_json, ParseError
 
 
 class TestParseRequest(unittest.TestCase):

@@ -2,9 +2,15 @@
 """
 import unittest
 
-from opening_hours.request.clean import clean, CleanRequestError
-from opening_hours.constants import DAYS_OF_WEEK
+from src.working_hours import Week, WorkingHoursError
+from src.working_hours.constants import WEEKDAYS
 from tests.utils import generate_empty_request
+
+
+def create_working_hours_from_json(working_hours_json):
+    """Help to test creating week, weekday and shift model from json
+    """
+    return Week.create_week_from_json(working_hours_json).to_dict()
 
 
 def generate_empty_response():
@@ -18,7 +24,7 @@ def generate_empty_response():
             'hours': [],
             'is_open': False
         }
-        for day_of_week in DAYS_OF_WEEK
+        for day_of_week in WEEKDAYS
     ]
 
 
@@ -44,7 +50,8 @@ class TestCleanOpeningHours(unittest.TestCase):
         """
         hours = generate_empty_request()
         expected_result = generate_empty_response()
-        self.assertEqual(clean(hours), expected_result)
+        self.assertEqual(
+            create_working_hours_from_json(hours), expected_result)
 
     def test_multiple_hours_during_same_day_processed_successfully(self):
         """
@@ -91,7 +98,8 @@ class TestCleanOpeningHours(unittest.TestCase):
         expected_result = update_response_list(
             generate_empty_response(),
             expected_result)
-        self.assertEqual(clean(hours), expected_result)
+        self.assertEqual(
+            create_working_hours_from_json(hours), expected_result)
 
     def test_closing_on_the_next_day_processed_successfully(self):
         """
@@ -133,7 +141,8 @@ class TestCleanOpeningHours(unittest.TestCase):
         expected_result = update_response_list(
             generate_empty_response(),
             expected_result)
-        self.assertEqual(clean(hours), expected_result)
+        self.assertEqual(
+            create_working_hours_from_json(hours), expected_result)
 
     def test_sunday_with_closing_on_monday_processed_successfully(self):
         """
@@ -175,7 +184,8 @@ class TestCleanOpeningHours(unittest.TestCase):
         expected_result = update_response_list(
             generate_empty_response(),
             expected_result)
-        self.assertEqual(clean(hours), expected_result)
+        self.assertEqual(
+            create_working_hours_from_json(hours), expected_result)
 
     def test_days_of_week_are_in_the_right_order(self):
         """
@@ -229,7 +239,8 @@ class TestCleanOpeningHours(unittest.TestCase):
         expected_result = update_response_list(
             generate_empty_response(),
             expected_result)
-        self.assertEqual(clean(hours), expected_result)
+        self.assertEqual(
+            create_working_hours_from_json(hours), expected_result)
 
     def test_error_is_thrown_if_closing_hours_are_not_found(self):
         """
@@ -244,8 +255,8 @@ class TestCleanOpeningHours(unittest.TestCase):
                 }
             ]
         }
-        with self.assertRaises(CleanRequestError):
-            clean(hours)
+        with self.assertRaises(WorkingHoursError):
+            create_working_hours_from_json(hours)
 
     def test_error_is_thrown_if_hours_are_not_found(self):
         """
@@ -260,8 +271,8 @@ class TestCleanOpeningHours(unittest.TestCase):
                 }
             ]
         }
-        with self.assertRaises(CleanRequestError):
-            clean(hours)
+        with self.assertRaises(WorkingHoursError):
+            create_working_hours_from_json(hours)
 
     def test_error_is_thrown_if_multiple_hours_of_the_same_type_are_found(
             self):
@@ -281,5 +292,5 @@ class TestCleanOpeningHours(unittest.TestCase):
                 }
             ]
         }
-        with self.assertRaises(CleanRequestError):
-            clean(hours)
+        with self.assertRaises(WorkingHoursError):
+            create_working_hours_from_json(hours)

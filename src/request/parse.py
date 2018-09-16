@@ -4,7 +4,7 @@ import base64
 import binascii
 import json
 
-from opening_hours.exceptions import ValueErrorWithMessage
+from src.exceptions import ValueErrorWithMessage
 
 
 class ParseError(ValueErrorWithMessage):
