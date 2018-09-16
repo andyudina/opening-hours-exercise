@@ -13,10 +13,10 @@ AWS Lambda works fine for stateless apps without strict non-functional requireme
 
 ### Prerequisites
 
-[Python3](https://www.python.org/downloads/) and [Virtualenv] (https://virtualenv.pypa.io/en/stable/) are required to install and run this app
+[Python3](https://www.python.org/downloads/) and [Virtualenv](https://virtualenv.pypa.io/en/stable/) are required to install and run this app
 If you use python3 earlier than 3.4, make sure that [pip](https://pip.pypa.io/en/stable/installing/) is also installed
 
-1. [Install aws-sam-cli to run AWS API Gateway and AWS Lambda locally] (https://github.com/awslabs/aws-sam-cli/blob/develop/docs/installation.rst)
+1. [Install aws-sam-cli to run AWS API Gateway and AWS Lambda locally](https://github.com/awslabs/aws-sam-cli/blob/develop/docs/installation.rst)
 
 ### Install
 
